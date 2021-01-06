@@ -120,17 +120,21 @@ module "rocketMQ" {
 module "rds" {
   source = "./db/rds"
   use_rds_db = var.use_rds_module
-  rds_count = var.rds_count
+  rds_database_count = var.rds_database_count
   delete_protection = var.delete_protection
   engine = var.rds_engine
   engine_version = var.rds_engine_version
   instance_type = var.rds_instance_type
   instance_storage = var.rds_instance_storage
   db_instance_storage_type = var.rds_instance_storage_type
-  instance_name = var.rds_instance_name
+  rds_name = var.rds_instance_name
   vswitch_ids = "${var.rds_vswitch_id != "" ? [var.rds_vswitch_id] : module.vpc.vswitch_ids}"
   security_group_ids = module.ecs.security_group_id
   security_ips = ["${module.vpc.vpc_cidr_block}"]
+  account_name = var.account_name
+  character_set = var.character_set
+  database_name = var.database_name
+  rds_password = var.rds_password
   tags = var.tags
 }
 

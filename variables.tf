@@ -59,8 +59,8 @@ variable "mqtopic_count" {
   default = 2
 }
 
-variable "rds_count" {
-  default = 1
+variable "rds_database_count" {
+  default = 2
 }
 
 variable "count_format" {
@@ -328,6 +328,25 @@ variable "rds_instance_storage_type" {
 variable "rds_vswitch_id" {
   default = ""
 }
+
+variable "account_name" {
+  default = "test123"
+}
+
+variable "rds_password" {
+  default = "test123"
+}
+
+variable "database_name" {
+  default = "test_database_name"
+}
+
+variable "character_set" {
+  default = "utf8"
+}
+
+
+
 
 
 
