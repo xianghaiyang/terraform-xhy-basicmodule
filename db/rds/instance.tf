@@ -15,14 +15,14 @@ resource "alicloud_db_instance" "rds_instance" {
 
 resource "alicloud_db_account" "rds_account" {             # 创建数据库用户一样以及和用户对应的密码 root mysql
   count       = var.use_rds_db ? (var.rds_database_count != 0 ? 1 : (var.delete_protection ? 1 : 0)) : 0
-  instance_id = alicloud_db_instance.rds_instance.id
+  instance_id = alicloud_db_instance.rds_instance.0.id
   name        = var.account_name
   password    = var.rds_password
 }
 
 resource "alicloud_db_database" "rds_database" {
   count           = var.use_rds_db ? (var.rds_database_count != 0 ? var.rds_database_count : (var.delete_protection ? 1 : 0)) : 0
-  instance_id     = alicloud_db_instance.rds_instance.id
+  instance_id     = alicloud_db_instance.rds_instance.0.id
   name            = "${var.database_name}-${format(var.database_name, count.index+1)}"
   character_set   = var.character_set
 }
