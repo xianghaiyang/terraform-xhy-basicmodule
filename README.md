@@ -161,6 +161,8 @@ module "basicmodule" {
    
    ②关于付费：     后台所有资源均为按量付费。 注意：instance_charge_type 、internet_charge_type两个值不建议调整
    
+   ③关于开关：     很多资源依赖VPC及安全组，后台逻辑把安全组放在了ECS实例模块中。所以为防止出错，不建议关闭VPC及ECS实例开关
+   
    ③关于vpc：      后台逻辑支持创建一个vpc，之后的基本所有资源都是在该vpc下，如若同一地区还需要建立多个vpc,可新建工作目录更改资源名称等，重新terraform init 
    
    ④关于vswitch：  后台逻辑在每个可用区下均创建一个vswitch，你需要提供该地区下的可用区情况作为参数
