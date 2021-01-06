@@ -135,6 +135,8 @@ module "rds" {
   character_set = var.character_set
   database_name = var.database_name
   rds_password = var.rds_password
+  count_format = var.count_format
   tags = var.tags
+
 }
 

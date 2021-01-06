@@ -30,4 +30,6 @@ variable "database_name" {}
 
 variable "character_set" {}
 
+variable "count_format" {}
+
 variable "tags" {}
