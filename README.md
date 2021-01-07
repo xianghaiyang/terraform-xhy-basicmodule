@@ -172,26 +172,28 @@ module "basicmodule" {
 <br>    
 
 ## 三、Tips
-    
-   ①创建及释放：   资源的创建顺序需满足依赖逻辑，例如，创建了vswitch后，才能建立ECS。同时释放顺序也需要满足依赖逻辑。创建多个资源时，会根据你提供的命名进行“排序命名”
+
+    1. 创建及释放：   资源的创建顺序需满足依赖逻辑，例如，创建了vswitch后，才能建立ECS。同时释放顺序也需要满足依赖逻辑。创建多个资源时，会根据你提供的命名进行“排序命名”
    
-   ②关于付费：     后台所有资源均为按量付费。 注意：instance_charge_type 、internet_charge_type两个值不建议调整
+    2. 关于付费：     后台所有资源均为按量付费。 注意：instance_charge_type 、internet_charge_type两个值不建议调整
    
-   ③关于开关：     很多资源依赖VPC及安全组，后台逻辑把安全组放在了ECS实例模块中。所以为防止出错，不建议关闭VPC及ECS实例开关
+    3. 关于开关：     很多资源依赖VPC及安全组，后台逻辑把安全组放在了ECS实例模块中。所以为防止出错，不建议关闭VPC及ECS实例开关
    
-   ④关于vpc：      后台逻辑支持创建一个vpc，之后的基本所有资源都是在该vpc下，如若同一地区还需要建立多个vpc,可新建工作目录更改资源名称等，重新terraform init 
+    4. 关于vpc：      后台逻辑支持创建一个vpc，之后的基本所有资源都是在该vpc下，如若同一地区还需要建立多个vpc,可新建工作目录更改资源名称等，重新terraform init 
    
-   ⑤关于vswitch：  后台逻辑在每个可用区下均创建一个vswitch，你需要提供该地区下的可用区情况作为参数
+    5. 关于vswitch：  后台逻辑在每个可用区下均创建一个vswitch，你需要提供该地区下的可用区情况作为参数
    
-   ⑥关于ECS：      后台逻辑根据你提供的交换机id，在指定交换机下创建指定数量的ECS。如若未指定交换机，将在随机交换机下创建指定数量的ECS
+    6. 关于ECS：      后台逻辑根据你提供的交换机id，在指定交换机下创建指定数量的ECS。如若未指定交换机，将在随机交换机下创建指定数量的ECS
    
-   ⑦关于slb：      后台逻辑根据你提供的交换机id创建一个 内网slb，并自动绑定所有ECS实例。如若未指定交换机，将在随机交换机下创建指定数量的ECS。当address_type选择公网时，交换机会被忽略。即address_type优先级大于slb_vswitch_id
+    7. 关于slb：      后台逻辑根据你提供的交换机id创建一个 内网slb，并自动绑定所有ECS实例。如若未指定交换机，将在随机交换机下创建指定数量的ECS。当address_type选择公网时，交换机会被忽略。即address_type优先级大于slb_vswitch_id
    
-   ⑧关于eip：      后台逻辑可创建多个eip，并根据你提供的资源id（可以是NAT网关实例ID、负载均衡SLB实例ID、云服务器ECS实例ID、辅助弹性网卡实例ID、高可用虚拟IP实例ID），给这些资源分别添加弹性公网。注意，创建几个eip，就需要传入几个资源id（注意eip并非vpc下的资源）
+    8. 关于eip：      后台逻辑可创建多个eip，并根据你提供的资源id（可以是NAT网关实例ID、负载均衡SLB实例ID、云服务器ECS实例ID、辅助弹性网卡实例ID、高可用虚拟IP实例ID），给这些资源分别添加弹性公网。注意，创建几个eip，就需要传入几个资源id（注意eip并非vpc下的资源）
    
-   ⑨关于mongodb：  后台逻辑根据你提供的交换机id，在指定交换机下创建指定数量的mongo实例。如若未指定交换机，将在随机交换机下创建指定数量的mongo实例
+    9. 关于mongodb：  后台逻辑根据你提供的交换机id，在指定交换机下创建指定数量的mongo实例。如若未指定交换机，将在随机交换机下创建指定数量的mongo实例
    
-   ⑩关于rocketMQ： 后台逻辑创建一个实例，一个tcp组（http存在未解决的BUG能创建但无法释放），mqtopic_count个topic
+    10. 关于rocketMQ： 后台逻辑创建一个实例，一个tcp组（http存在未解决的BUG能创建但无法释放），mqtopic_count个topic
+   
+   
 
 
 
@@ -326,7 +328,7 @@ module "basicmodule" {
 | rds_password | 账户密码 由字母、数字或下划线组成，长度为6 ~ 32个字符| string | 0 |  yes |
 | database_name | database命名 | string  | "" |  no |
 | character_set | 字符集,[相关规定](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs/resources/db_database) | string | "" |  no |
-| rds_vswitch_id | 指定所建组对应的协议类型 tcp/http(目前该参数存在BUG，默认创建tcp协议，不传值即可) | string  | ["tcp","http"] |  no |
+| rds_vswitch_id | 数据库绑定的交换机id | string  | "" |  no |
 
 
 
