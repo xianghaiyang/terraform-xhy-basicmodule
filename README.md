@@ -22,17 +22,19 @@ module "basicmodule" {
   #resource management
   delete_protection   = false
   use_vpc_module      = true
-  use_ecs_module      = false
+  use_ecs_module      = true
   use_slb_module      = false
   use_eip_module      = false
   use_mongo_module    = false
   use_mq_module       = false
+  use_rds_module      = true
 ===============分割线===================
   #which_bucket_for_uploading = 1
   ecs_count           = 3
   mongo_count         = 2
   eip_count           = 2
   mqtopic_count       = 2
+  rds_database_count  = 2
 ===============分割线===================
   tags = {
     name   = "xhy"
@@ -113,8 +115,22 @@ module "basicmodule" {
   group_description      = "group_discription"
   topic_description      = "topic_discription"
   topic_message_type     = 0
-
- 
+  
+  
+================资源分割线=================
+  #rds
+  rds_instance_name          = "xhy_test"
+  rds_engine                 = "MySQL"
+  rds_engine_version         = "5.7"
+  rds_instance_type          = "rds.mysql.t1.small"
+  rds_instance_storage       = "20"
+  rds_instance_storage_type  = "local_ssd"
+  account_name               = "test123"
+  rds_password               = "test123"
+  database_name              = "test_database_name"
+  character_set              = "utf8"
+  rds_vswitch_id             = ""
+  
 ```
 <br>
 
@@ -156,24 +172,28 @@ module "basicmodule" {
 <br>    
 
 ## 三、Tips
-    
-   ①创建及释放：   资源的创建顺序需满足依赖逻辑，例如，创建了vswitch后，才能建立ECS。同时释放顺序也需要满足依赖逻辑。创建多个资源时，会根据你提供的命名进行“排序命名”
+
+- 创建及释放：   资源的创建顺序需满足依赖逻辑，例如，创建了vswitch后，才能建立ECS。同时释放顺序也需要满足依赖逻辑。创建多个资源时，会根据你提供的命名进行“排序命名”
    
-   ②关于付费：     后台所有资源均为按量付费。 注意：instance_charge_type 、internet_charge_type两个值不建议调整
+- 关于付费：     后台所有资源均为按量付费。 注意：instance_charge_type 、internet_charge_type两个值不建议调整
    
-   ③关于vpc：      后台逻辑支持创建一个vpc，之后的基本所有资源都是在该vpc下，如若同一地区还需要建立多个vpc,可新建工作目录更改资源名称等，重新terraform init 
+- 关于开关：     很多资源依赖VPC及安全组，后台逻辑把安全组放在了ECS实例模块中。所以为防止出错，不建议关闭VPC及ECS实例开关
    
-   ④关于vswitch：  后台逻辑在每个可用区下均创建一个vswitch，你需要提供该地区下的可用区情况作为参数
+- 关于vpc：      后台逻辑支持创建一个vpc，之后的基本所有资源都是在该vpc下，如若同一地区还需要建立多个vpc,可新建工作目录更改资源名称等，重新terraform init 
    
-   ⑤关于ECS：      后台逻辑根据你提供的交换机id，在指定交换机下创建指定数量的ECS。如若未指定交换机，将在随机交换机下创建指定数量的ECS
+- 关于vswitch：  后台逻辑在每个可用区下均创建一个vswitch，你需要提供该地区下的可用区情况作为参数
    
-   ⑥关于slb：      后台逻辑根据你提供的交换机id创建一个 内网slb，并自动绑定所有ECS实例。如若未指定交换机，将在随机交换机下创建指定数量的ECS。当address_type选择公网时，交换机会被忽略。即address_type优先级大于slb_vswitch_id
+- 关于ECS：      后台逻辑根据你提供的交换机id，在指定交换机下创建指定数量的ECS。如若未指定交换机，将在随机交换机下创建指定数量的ECS
    
-   ⑦关于eip：      后台逻辑可创建多个eip，并根据你提供的资源id（可以是NAT网关实例ID、负载均衡SLB实例ID、云服务器ECS实例ID、辅助弹性网卡实例ID、高可用虚拟IP实例ID），给这些资源分别添加弹性公网。注意，创建几个eip，就需要传入几个资源id（注意eip并非vpc下的资源）
+- 关于slb：      后台逻辑根据你提供的交换机id创建一个 内网slb，并自动绑定所有ECS实例。如若未指定交换机，将在随机交换机下创建指定数量的ECS。当address_type选择公网时，交换机会被忽略。即address_type优先级大于slb_vswitch_id
    
-   ⑧关于mongodb：  后台逻辑根据你提供的交换机id，在指定交换机下创建指定数量的mongo实例。如若未指定交换机，将在随机交换机下创建指定数量的mongo实例
+-  关于eip：      后台逻辑可创建多个eip，并根据你提供的资源id（可以是NAT网关实例ID、负载均衡SLB实例ID、云服务器ECS实例ID、辅助弹性网卡实例ID、高可用虚拟IP实例ID），给这些资源分别添加弹性公网。注意，创建几个eip，就需要传入几个资源id（注意eip并非vpc下的资源）
    
-   ⑨关于rocketMQ： 后台逻辑创建一个实例，一个tcp组（http存在未解决的BUG能创建但无法释放），mqtopic_count个topic
+- 关于mongodb：  后台逻辑根据你提供的交换机id，在指定交换机下创建指定数量的mongo实例。如若未指定交换机，将在随机交换机下创建指定数量的mongo实例
+   
+- 关于rocketMQ： 后台逻辑创建一个实例，一个tcp组（http存在未解决的BUG能创建但无法释放），mqtopic_count个topic
+   
+   
 
 
 
@@ -290,6 +310,25 @@ module "basicmodule" {
 | topic_description | topic描述 | string | "" |  no |
 | group_type | 指定所建组对应的协议类型 tcp/http(目前该参数存在BUG，默认创建tcp协议，不传值即可) | list  | ["tcp","http"] |  no |
 | topic_message_type |topic处理的消息类型 0：普通消息、1：分区顺序消息、2：全局顺序消息、4：事务消息、5：定时/延时消息| int | 0 |  yes |
+
+
+
+<br>
+
+**rds**
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| rds_instance_name | 数据库实例命名 | string  | "" | yes  |
+| rds_engine | 数据库类型MySQL, SQLServer, PostgreSQL, and PPAS | string  | "" | yes  |
+| rds_engine_version | [数据库版本](https://www.alibabacloud.com/help/zh/doc-detail/26228.htm) | string | "" | yes  |
+| rds_instance_type | [数据库规格](https://www.alibabacloud.com/help/zh/doc-detail/26312.htm) | string  | "" |  no |
+| rds_instance_storage | 储存大小，建议不小于20 | string  | "" |  no |
+| rds_instance_storage_type | 数据库储存盘类型local_ssd、cloud_ssd、cloud_essd、cloud_essd2、cloud_essd3 | string | "" |  no |
+| account_name | 数据库账户名，它可以由小写字母、数字和下划线组成，并且必须以字母开头，长度不超过16个字符 | string  | ["tcp","http"] |  no |
+| rds_password | 账户密码 由字母、数字或下划线组成，长度为6 ~ 32个字符| string | 0 |  yes |
+| database_name | database命名 | string  | "" |  no |
+| character_set | 字符集,[相关规定](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs/resources/db_database) | string | "" |  no |
+| rds_vswitch_id | 数据库绑定的交换机id | string  | "" |  no |
 
 
 
