@@ -41,7 +41,6 @@ resource "alicloud_slb_listener" "listen" {
 
 }
 
-
 resource "alicloud_slb_attachment" "connect" {
   count = "${var.use_slb_module ? 1 : (var.delete_protection ? 1 : 0)}"
   load_balancer_id = "${data.alicloud_slbs.slb.slbs.0.id}"
