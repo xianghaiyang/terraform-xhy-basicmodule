@@ -22,17 +22,19 @@ module "basicmodule" {
   #resource management
   delete_protection   = false
   use_vpc_module      = true
-  use_ecs_module      = false
+  use_ecs_module      = true
   use_slb_module      = false
   use_eip_module      = false
   use_mongo_module    = false
   use_mq_module       = false
+  use_rds_module      = true
 ===============分割线===================
   #which_bucket_for_uploading = 1
   ecs_count           = 3
   mongo_count         = 2
   eip_count           = 2
   mqtopic_count       = 2
+  rds_database_count  = 2
 ===============分割线===================
   tags = {
     name   = "xhy"
@@ -113,8 +115,22 @@ module "basicmodule" {
   group_description      = "group_discription"
   topic_description      = "topic_discription"
   topic_message_type     = 0
-
- 
+  
+  
+================资源分割线=================
+  #rds
+  rds_instance_name          = "xhy_test"
+  rds_engine                 = "MySQL"
+  rds_engine_version         = "5.7"
+  rds_instance_type          = "rds.mysql.t1.small"
+  rds_instance_storage       = "20"
+  rds_instance_storage_type  = "local_ssd"
+  account_name               = "test123"
+  rds_password               = "test123"
+  database_name              = "test_database_name"
+  character_set              = "utf8"
+  rds_vswitch_id             = ""
+  
 ```
 <br>
 
@@ -292,6 +308,25 @@ module "basicmodule" {
 | topic_description | topic描述 | string | "" |  no |
 | group_type | 指定所建组对应的协议类型 tcp/http(目前该参数存在BUG，默认创建tcp协议，不传值即可) | list  | ["tcp","http"] |  no |
 | topic_message_type |topic处理的消息类型 0：普通消息、1：分区顺序消息、2：全局顺序消息、4：事务消息、5：定时/延时消息| int | 0 |  yes |
+
+
+
+<br>
+
+**rds**
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| rds_instance_name | 数据库实例命名 | string  | "" | yes  |
+| rds_engine | 数据库类型MySQL, SQLServer, PostgreSQL, and PPAS | string  | "" | yes  |
+| rds_engine_version | [数据库版本](https://www.alibabacloud.com/help/zh/doc-detail/26228.htm) | string | "" | yes  |
+| rds_instance_type | [数据库规格](https://www.alibabacloud.com/help/zh/doc-detail/26312.htm) | string  | "" |  no |
+| rds_instance_storage | 储存大小，建议不小于20 | string  | "" |  no |
+| rds_instance_storage_type | 数据库储存盘类型local_ssd、cloud_ssd、cloud_essd、cloud_essd2、cloud_essd3 | string | "" |  no |
+| account_name | 数据库账户名，它可以由小写字母、数字和下划线组成，并且必须以字母开头，长度不超过16个字符 | string  | ["tcp","http"] |  no |
+| rds_password | 账户密码 由字母、数字或下划线组成，长度为6 ~ 32个字符| string | 0 |  yes |
+| database_name | database命名 | string  | "" |  no |
+| character_set | 字符集,[相关规定](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs/resources/db_database) | string | "" |  no |
+| rds_vswitch_id | 指定所建组对应的协议类型 tcp/http(目前该参数存在BUG，默认创建tcp协议，不传值即可) | string  | ["tcp","http"] |  no |
 
 
 
