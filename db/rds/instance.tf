@@ -1,8 +1,8 @@
 
 resource "alicloud_db_instance" "rds_instance" {
   count  = var.use_rds_db ? (var.rds_database_count != 0 ? 1 : (var.delete_protection ? 1 : 0)) : 0
-  engine  = var.engine                          # 引擎版本
-  engine_version  = var.engine_version          # 数据库版本MySQL，SQL Server，，https://www.alibabacloud.com/help/zh/doc-detail/26228.htm
+  engine  = var.engine                          # 数据库类型 MySQL, SQLServer, PostgreSQL, and PPAS
+  engine_version  = var.engine_version          # 数据库版本https://www.alibabacloud.com/help/zh/doc-detail/26228.htm
   instance_type = var.instance_type             # 规格
   instance_storage = var.instance_storage       # 数据库大小 20以上你绝壁不会有BUG
   db_instance_storage_type = var.db_instance_storage_type # 储存类型，local_ssd、cloud_ssd、cloud_essd、cloud_essd2、cloud_essd3
