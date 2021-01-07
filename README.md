@@ -179,8 +179,6 @@ module "basicmodule" {
    
 - 关于开关：     很多资源依赖VPC及安全组，后台逻辑把安全组放在了ECS实例模块中。所以为防止出错，不建议关闭VPC及ECS实例开关
    
-- 关于vpc：      后台逻辑支持创建一个vpc，之后的基本所有资源都是在该vpc下，如若同一地区还需要建立多个vpc,可新建工作目录更改资源名称等，重新terraform init 
-   
 - 关于vswitch：  后台逻辑在每个可用区下均创建一个vswitch，你需要提供该地区下的可用区情况作为参数
    
 - 关于ECS：      后台逻辑根据你提供的交换机id，在指定交换机下创建指定数量的ECS。如若未指定交换机，将在随机交换机下创建指定数量的ECS
@@ -191,7 +189,9 @@ module "basicmodule" {
    
 - 关于mongodb：  后台逻辑根据你提供的交换机id，在指定交换机下创建指定数量的mongo实例。如若未指定交换机，将在随机交换机下创建指定数量的mongo实例
    
-- 关于rocketMQ： 后台逻辑创建一个实例，一个tcp组（http存在未解决的BUG能创建但无法释放），mqtopic_count个topic
+- 关于rocketMQ： 后台逻辑创建一个实例，一个tcp组（http存在未解决的BUG能创建但无法释放），mqtopic_count个topic（该资源不绑定vpc）
+
+- 关于rds： 后台
    
    
 
