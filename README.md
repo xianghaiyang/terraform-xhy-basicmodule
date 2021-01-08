@@ -191,7 +191,7 @@ module "basicmodule" {
    
 - 关于rocketMQ： 后台逻辑创建一个实例，一个tcp组（http存在未解决的BUG能创建但无法释放），mqtopic_count个topic（该资源不绑定vpc）
 
-- 关于rds： 后台
+- 关于rds：      后台逻辑根据你提供的交换机id，在指定交换机下创建一个rds实例，、一个账号，database_count个database。如若未指定交换机，将在随机交换机下创建rds实例
    
    
 
