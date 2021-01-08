@@ -1,6 +1,6 @@
 #Main
 variable "region" {
-  default= "cn-chengdu"
+  default= ""
 }
 
 variable "profile" {

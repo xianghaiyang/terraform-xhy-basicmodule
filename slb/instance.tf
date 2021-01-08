@@ -3,7 +3,7 @@
 resource "alicloud_slb" "slb" {
   count = "${var.use_slb_module ? 1 : 0}"
   name = "${var.slb_name}"
-  address_type = "${var.address_type}"                       # 公网地址还是内网地址（有交换机的时候直接忽略）
+  address_type = "${var.address_type}"                       # 转发公网地址还是转发内网地址（有交换机的时候直接忽略）
   specification = "${var.specification}"                     # 规格
 //  master_zone_id = "${var.master_zone_id}"
 //  slave_zone_id = "${var.slave_zone_id}"

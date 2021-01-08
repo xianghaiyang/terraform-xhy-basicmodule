@@ -1,6 +1,14 @@
-//adfadfaf
+
+terraform {
+  required_providers {
+    alicloud = {
+      source = "aliyun/alicloud"
+      version = "1.108.0"
+    }
+  }
+}
+
 provider "alicloud" {
-  version = "1.108.0"
   region = "${var.region}"
   profile = "${var.profile}"
 //  configuration_source = "xianghaiyang/terraform-xhy-basicmodule"
