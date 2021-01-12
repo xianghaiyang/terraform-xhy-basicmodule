@@ -40,7 +40,7 @@ resource "alicloud_snat_entry" "this_snat_entry" {
   snat_table_id     = alicloud_nat_gateway.nat.0.snat_table_ids      # natid
   snat_entry_name   = var.snat_entry_name                            #  命名
   source_vswitch_id = element(distinct(compact(concat(var.snat_vswitch_id))), 0)   # 该交换机s 下的主机将通过配置的公网ip(可通过eip变成多个)访问internet
-  snat_ip           = element(distinct(compact(concat(alicloud_eip.eip.*.id))), 0)                                  # 公网ip地址，[]
+  snat_ip           = element(distinct(compact(concat([alicloud_eip.eip.*.id]))), 0)                                  # 公网ip地址，[]
 }
 
 
