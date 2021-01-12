@@ -4,7 +4,7 @@
 resource "alicloud_nat_gateway" "nat" {
   count                = var.use_nat_module ? 1 : 0
   vpc_id               = var.vpc_id                    # 这个破东西需要vpc
-  specification        = var.specification             # 规格大小，Small、Middle、Large
+  specification        = "Small"            # 规格大小，Small、Middle、Large
   name                 = var.name
   instance_charge_type = "PostPaid"                    #
   vswitch_id           = element(distinct(compact(concat(var.vswitch_id))), 0)  # 新型的网关就有交换机这个东东
