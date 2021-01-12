@@ -13,6 +13,10 @@
 5. 根目录下的main.tf文件中的module下，有availability_zones = "${module.vpc.availability_zones}"
    通过module引用，实际是以根目录为基础，去引用各个子文件夹里的output.tf
 
+6. 入网使用slb，出网使用nat网关
+
+7. 新型nat网关实例可绑定一个交换机，然后出网入网均可绑定任意交换机
+
 
 二、 各种资源创建方案
 

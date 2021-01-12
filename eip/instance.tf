@@ -1,6 +1,6 @@
 
 
-# 一个eip只能绑定一个实例资源
+# 一个实例资源可绑定多个eip
 resource "alicloud_eip" "eip" {
   count                 = "${var.use_eip_module ? (var.eip_count != 0 ? var.eip_count : (var.delete_protection ? 1 : 0)) : 0}"
   name                  = "${var.eip_name}-${format(var.count_format, count.index+1)}"

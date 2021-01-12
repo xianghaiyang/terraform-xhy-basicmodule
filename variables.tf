@@ -43,6 +43,10 @@ variable "use_rds_module" {
   default = false
 }
 
+variable "use_nat_module" {
+  default = false
+}
+
 variable "ecs_count" {
   default = 2
 }
@@ -143,32 +147,6 @@ variable "tags" {
 }
 
 
-# ========================EIP===========================
-
-variable "eip_name" {
-  default = "xhy_test"
-}
-
-variable "eip_internet_charge_type" {
-  default = "PayByTraffic"
-}
-
-variable "bandwidth" {
-  default = "2"
-}
-
-variable "isp" {
-  default = "BGP"
-}
-
-variable "eip_instance_charge_type" {
-  default = "PostPaid"
-}
-
-
-variable "instance_ids" {
-  default = []
-}
 
 # =========================ECS=========================
 variable "image_owners" {
@@ -346,7 +324,49 @@ variable "character_set" {
 }
 
 
+# ==============natgateway===============
 
+variable "nat_name" {
+  default = "xhy_test"
+}
+
+variable "snat_entry_name" {
+  default = "xhy_test"
+}
+
+variable "nat_vswitch_id" {
+  default = ""
+}
+
+variable "snat_vswitch_id" {
+  default = ""
+}
+
+variable "nat_specification" {
+  default = "Small"
+}
+
+# ========================EIP===========================
+
+variable "eip_name" {
+  default = "xhy_test"
+}
+
+variable "eip_internet_charge_type" {
+  default = "PayByTraffic"
+}
+
+variable "bandwidth" {
+  default = "2"
+}
+
+variable "isp" {
+  default = "BGP"
+}
+
+variable "eip_instance_charge_type" {
+  default = "PostPaid"
+}
 
 
 

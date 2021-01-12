@@ -92,22 +92,6 @@ module "mongo" {
 
 
 
-module "eip" {
-  source = "./eip"
-  use_eip_module = "${var.use_eip_module}"
-  bandwidth = "${var.bandwidth}"
-  eip_internet_charge_type = "${var.eip_internet_charge_type}"
-  isp = "${var.isp}"
-  eip_instance_charge_type = "${var.eip_instance_charge_type}"
-  tags = "${var.tags}"
-  delete_protection = "${var.delete_protection}"
-  eip_count = "${var.eip_count}"
-  eip_name = "${var.eip_name}"
-  instance_id = "${var.instance_ids}"
-  count_format = "${var.count_format}"
-}
-
-
 module "rocketMQ" {
   source = "./rocketmq"
   use_mq_module = var.use_mq_module
@@ -147,4 +131,35 @@ module "rds" {
   tags = var.tags
 
 }
+
+
+module "natgateway" {
+  source = "./natgateway"
+  use_nat_module = var.use_nat_module
+  bandwidth = var.bandwidth
+  count_format = var.count_format
+  delete_protection = var.delete_protection
+  eip_count = var.eip_count
+  eip_instance_charge_type = var.eip_instance_charge_type
+  eip_internet_charge_type = var.eip_internet_charge_type
+  eip_name = var.eip_name
+  isp = var.isp
+  name = var.nat_name
+  snat_entry_name = var.snat_entry_name
+  snat_vswitch_id = "${var.snat_vswitch_id != "" ? [var.snat_vswitch_id] : module.vpc.vswitch_ids}"
+  specification = var.nat_specification
+  tags = var.tags
+  vpc_id = module.vpc.vpc_id
+  vswitch_id = "${var.nat_vswitch_id != "" ? [var.nat_vswitch_id] : module.vpc.vswitch_ids}"
+}
+
+
+
+
+
+
+
+
+
+
 

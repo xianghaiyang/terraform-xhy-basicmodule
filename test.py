@@ -19,5 +19,23 @@
 c = "a"
 print(len(c))
 
+#
+# locals {
+#   snat_with_vswitch_ids = flatten(
+#     [
+#       for _, obj in var.snat_with_vswitch_ids : [
+#         for _, id in split(",", lookup(obj, "vswitch_ids", "")) : {
+#           name              = lookup(obj, "name", "")
+#           source_vswitch_id = id
+#           snat_ip           = lookup(obj, "snat_ip", local.common_snat_ip)
+#         }
+#       ]
+#     ]
+#   )
+# }
 
+
+a = ["1, 2, 3"]
+
+print(len(a))
 
