@@ -36,7 +36,7 @@ resource "alicloud_eip_association" "eip_asso" {
 # 出网()
 resource "alicloud_snat_entry" "this_snat_entry" {
   # 几个交换机，就建立几个，一个交换机一个eip
-  count             = "${var.use_nat_module ? (var.eip_count != 0 ? len(var.snat_vswitch_id) : (var.delete_protection ? 1 : 0)) : 0}"
+  count             = "${var.use_nat_module ? (var.eip_count != 0 ? 1 : (var.delete_protection ? 1 : 0)) : 0}"
   snat_table_id     = alicloud_nat_gateway.nat.0.snat_table_ids      # natid
   snat_entry_name   = var.snat_entry_name                            #  命名
   source_vswitch_id = element(distinct(compact(concat(var.snat_vswitch_id))), 0)   # 该交换机s 下的主机将通过配置的公网ip(可通过eip变成多个)访问internet
