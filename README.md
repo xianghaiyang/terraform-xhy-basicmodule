@@ -24,15 +24,16 @@ module "basicmodule" {
   use_vpc_module      = true
   use_ecs_module      = true
   use_slb_module      = false
-  use_eip_module      = false
+  #use_eip_module      = false   已经取消eip的单独使用
   use_mongo_module    = false
   use_mq_module       = false
   use_rds_module      = true
+  use_nat_module      = true
 ===============分割线===================
   #which_bucket_for_uploading = 1
   ecs_count           = 3
   mongo_count         = 2
-  eip_count           = 2
+  eip_count           = 1
   mqtopic_count       = 2
   rds_database_count  = 2
 ===============分割线===================
@@ -84,7 +85,6 @@ module "basicmodule" {
   #slb_vswitch_id = ""
 
 
-
 ================资源分割线=================
   #mongo
   mongo_name = "xhy_test"
@@ -95,17 +95,6 @@ module "basicmodule" {
   mongo_engine_version = "4.2"
   #mongo_vswitch_id = ""
   
-================资源分割线=================
-  #EIP
-  eip_name                    = "xhy_test"
-  eip_internet_charge_type    = "PayByTraffic"
-
-  bandwidth                   = "2"
-  isp                         = "BGP"
-  eip_instance_charge_type    = "PostPaid"
-  instance_ids               = ["i-2vcaftjuyjwcic78gggi", "i-2vch1w0uwx9qqa053urj"]
-
-
 ================资源分割线=================
   #rocketMQ
   instance_name          = "xhy_test_instance"
@@ -130,6 +119,17 @@ module "basicmodule" {
   database_name              = "test_database_name"
   character_set              = "utf8"
   rds_vswitch_id             = ""
+  
+  
+  ================资源分割线=================
+  #nat_gateway
+  nat_name             = "xhy_test"
+  snat_entry_name      = "xhy_test"
+  nat_specification    = "Small"
+  #nat_vswitch_id      = ""
+  #snat_vswitch_id     = ""
+  eip_name             = "xhy_test"
+  bandwidth            = "2"
   
 ```
 <br>
@@ -185,13 +185,15 @@ module "basicmodule" {
    
 - 关于slb：      后台逻辑根据你提供的交换机id创建一个 内网slb，并自动绑定所有ECS实例。如若未指定交换机，将在随机交换机下创建指定数量的ECS。当address_type选择公网时，交换机会被忽略。即address_type优先级大于slb_vswitch_id
    
--  关于eip：      后台逻辑可创建多个eip，并根据你提供的资源id（可以是NAT网关实例ID、负载均衡SLB实例ID、云服务器ECS实例ID、辅助弹性网卡实例ID、高可用虚拟IP实例ID），给这些资源分别添加弹性公网。注意，创建几个eip，就需要传入几个资源id（注意eip并非vpc下的资源）
+-  关于eip：      后台逻辑可创建多个eip，并根据你提供的资源id（可以是NAT网关实例ID、负载均衡SLB实例ID、云服务器ECS实例ID、辅助弹性网卡实例ID、高可用虚拟IP实例ID），给这些资源分别添加弹性公网。注意，创建几个eip，就需要传入几个资源id（注意eip并非vpc下的资源）————现在已经取消该资源的独立使用
    
 - 关于mongodb：  后台逻辑根据你提供的交换机id，在指定交换机下创建指定数量的mongo实例。如若未指定交换机，将在随机交换机下创建指定数量的mongo实例
    
 - 关于rocketMQ： 后台逻辑创建一个实例，一个tcp组（http存在未解决的BUG能创建但无法释放），mqtopic_count个topic（该资源不绑定vpc）
 
 - 关于rds：      后台逻辑根据你提供的交换机id，在指定交换机下创建一个rds实例，、一个账号，database_count个database。如若未指定交换机，将在随机交换机下创建rds实例
+
+- 关于nat网关：  snat和eip搭配使用，可根据eip_count控制eip的创建数量（目前只需要一个eip，用以交换机的粒度）——出网专用
    
    
 
@@ -329,6 +331,20 @@ module "basicmodule" {
 | database_name | database命名 | string  | "" |  no |
 | character_set | 字符集,[相关规定](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs/resources/db_database) | string | "" |  no |
 | rds_vswitch_id | 数据库绑定的交换机id | string  | "" |  no |
+
+
+<br>
+
+**nat**
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| nat_name | nat网关实例命名 | string  | "" | yes  |
+| snat_entry_name | 出网规则snat的条目命名 | string  | "" | yes  |
+| nat_specification | 出网流量规格 | string | "Small" | no  |
+| #nat_vswitch_id | nat网关实例所绑定的交换机| string  | "" |  no |
+| #snat_vswitch_id | 出网规则所绑定的交换机（可通过一个网段代替） | string  | "" |  no |
+| eip_name | eip命名 | string | "" |  yes |
+| bandwidth | eip的宽带大小Mbps | string  | "2" |  no |
 
 
 
