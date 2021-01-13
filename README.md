@@ -114,7 +114,7 @@ module "basicmodule" {
   rds_instance_type          = "rds.mysql.t1.small"
   rds_instance_storage       = "20"
   rds_instance_storage_type  = "local_ssd"
-  account_name               = "test123"
+  rds_account_name           = "test123"
   rds_password               = "test123"
   database_name              = "test_database_name"
   character_set              = "utf8"
@@ -326,7 +326,7 @@ module "basicmodule" {
 | rds_instance_type | [数据库规格](https://www.alibabacloud.com/help/zh/doc-detail/26312.htm) | string  | "" |  no |
 | rds_instance_storage | 储存大小，建议不小于20 | string  | "" |  no |
 | rds_instance_storage_type | 数据库储存盘类型local_ssd、cloud_ssd、cloud_essd、cloud_essd2、cloud_essd3 | string | "" |  no |
-| account_name | 数据库账户名，它可以由小写字母、数字和下划线组成，并且必须以字母开头，长度不超过16个字符 | string  | ["tcp","http"] |  no |
+| rds_account_name | 数据库账户名，它可以由小写字母、数字和下划线组成，并且必须以字母开头，长度不超过16个字符 | string  | ["tcp","http"] |  no |
 | rds_password | 账户密码 由字母、数字或下划线组成，长度为6 ~ 32个字符| string | 0 |  yes |
 | database_name | database命名 | string  | "" |  no |
 | character_set | 字符集,[相关规定](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs/resources/db_database) | string | "" |  no |
