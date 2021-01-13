@@ -5,7 +5,7 @@ resource "alicloud_kvstore_instance" "default" {
   instance_charge_type = "${var.instance_charge_type}"       # 预付费，后付费
   instance_class       = "${var.instance_class}"             # 实例规格
   vswitch_id           = element(distinct(compact(concat(var.vswitch_ids))), 0)                 # 交换机id
-  security_ips         = "${var.security_ips}"               # 白名单
+  security_ips         = var.security_ips               # 白名单
   instance_type        = "${var.instance_type}"              # Redis or Memcache
   engine_version       = "${var.engine_version}"             # 数据库版本 有2.8、4.0、5.0
   tags                 = var.tags

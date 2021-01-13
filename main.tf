@@ -168,7 +168,7 @@ module "redis" {
   instance_count = var.redis_count
   instance_name = var.redis_instance_name
   instance_type = var.redis_instance_type
-  security_ips = module.vpc.vpc_cidr_block
+  security_ips = ["${module.vpc.vpc_cidr_block}"]
   tags = var.tags
   use_redis_module = var.use_redis_module
   vswitch_ids = var.redis_vswitch_id != "" ? [var.redis_vswitch_id] : module.vpc.vswitch_ids
