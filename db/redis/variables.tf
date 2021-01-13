@@ -24,7 +24,7 @@ variable "account_password" {}
 
 variable "account_privilege" {}
 
-
+variable "backup_period" {}
 
 variable "count_format" {}
 

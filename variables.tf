@@ -423,3 +423,7 @@ variable "redis_account_password" {
   default = "test123"
   description = "It may consist of letters, digits, or underlines, with a length of 6 to 32 characters"
 }
+
+variable "redis_backup_period" {
+  default = ["Saturday", "Sunday"]
+}

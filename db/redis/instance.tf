@@ -23,5 +23,6 @@ resource "alicloud_kvstore_backup_policy" "default" {
   count         = "${var.use_redis_module ? 1 : 0}"
   instance_id   = "${element(alicloud_kvstore_instance.default.*.id, count.index)}"
                   # Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
+   backup_period = var.backup_period
 
 }

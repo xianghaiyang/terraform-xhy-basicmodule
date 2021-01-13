@@ -173,6 +173,7 @@ module "redis" {
   use_redis_module = var.use_redis_module
   vswitch_ids = var.redis_vswitch_id != "" ? [var.redis_vswitch_id] : module.vpc.vswitch_ids
 
+  backup_period = var.redis_backup_period
 }
 
 
