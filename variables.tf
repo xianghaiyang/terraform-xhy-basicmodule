@@ -420,7 +420,7 @@ variable "redis_account_name" {
 }
 
 variable "redis_account_password" {
-  default = "test123"
+  default = "YourPassword_123"
   description = "It may consist of letters, digits, or underlines, with a length of 6 to 32 characters"
 }
 
