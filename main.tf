@@ -123,10 +123,10 @@ module "rds" {
   vswitch_ids = "${var.rds_vswitch_id != "" ? [var.rds_vswitch_id] : module.vpc.vswitch_ids}"
   security_group_ids = module.ecs.security_group_id
   security_ips = ["${module.vpc.vpc_cidr_block}"]
-  account_name = var.account_name
+  account_name = var.rds_account_name
   character_set = var.character_set
   database_name = var.database_name
-  rds_password = var.rds_password
+  rds_password = var.rds_account_password
   count_format = var.count_format
   tags = var.tags
 
@@ -151,6 +151,28 @@ module "natgateway" {
   tags = var.tags
   vpc_id = module.vpc.vpc_id
   vswitch_id = "${var.nat_vswitch_id != "" ? [var.nat_vswitch_id] : module.vpc.vswitch_ids}"
+}
+
+
+module "redis" {
+  source = "./db/redis"
+
+  account_name = var.redis_account_name
+  account_password = var.redis_account_password
+  account_privilege = var.account_privilege
+  count_format = var.count_format
+  delete_protection = var.delete_protection
+  engine_version = var.redis_engine_version
+  instance_charge_type = var.redis_charge_type
+  instance_class = var.redis_instance_class
+  instance_count = var.redis_count
+  instance_name = var.redis_instance_name
+  instance_type = var.redis_instance_type
+  security_ips = module.vpc.vpc_cidr_block
+  tags = var.tags
+  use_redis_module = var.use_redis_module
+  vswitch_ids = var.redis_vswitch_id != "" ? [var.redis_vswitch_id] : module.vpc.vswitch_ids
+  backup_period = var.backup_period
 }
 
 

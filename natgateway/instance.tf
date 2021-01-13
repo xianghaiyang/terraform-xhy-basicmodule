@@ -10,6 +10,7 @@ resource "alicloud_nat_gateway" "nat" {
   vswitch_id           = element(distinct(compact(concat(var.vswitch_id))), 0)  # 新型的网关就有交换机这个东东
   nat_type             = "Enhanced"                    # 网关类型
 
+
 }
 
 resource "alicloud_eip" "eip" {

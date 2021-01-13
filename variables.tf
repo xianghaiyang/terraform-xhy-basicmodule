@@ -47,6 +47,10 @@ variable "use_nat_module" {
   default = false
 }
 
+variable "use_redis_module" {
+  default = false
+}
+
 variable "ecs_count" {
   default = 2
 }
@@ -67,9 +71,15 @@ variable "rds_database_count" {
   default = 2
 }
 
+variable "redis_count" {
+  default = "1"
+}
+
 variable "count_format" {
   default = "%02d"
 }
+
+
 
 
 
@@ -307,11 +317,11 @@ variable "rds_vswitch_id" {
   default = ""
 }
 
-variable "account_name" {
+variable "rds_account_name" {
   default = "test123"
 }
 
-variable "rds_password" {
+variable "rds_account_password" {
   default = "test123"
 }
 
@@ -324,7 +334,7 @@ variable "character_set" {
 }
 
 
-# ==============natgateway===============
+# ==============natgateway=====EIP===========
 
 variable "nat_name" {
   default = "xhy_test"
@@ -346,7 +356,7 @@ variable "nat_specification" {
   default = "Small"
 }
 
-# ========================EIP===========================
+# ================================================
 
 variable "eip_name" {
   default = "xhy_test"
@@ -358,6 +368,7 @@ variable "eip_internet_charge_type" {
 
 variable "bandwidth" {
   default = "2"
+  description = "eip的宽带大小"
 }
 
 variable "isp" {
@@ -369,4 +380,46 @@ variable "eip_instance_charge_type" {
 }
 
 
+# ========================redis===========================
 
+variable "redis_instance_name" {
+  default = "xhy_test"
+}
+
+variable "account_privilege" {
+  default = "RoleReadWrite"
+}
+
+variable "redis_engine_version" {
+  default = "4.0"
+  description = "2.8, 4.0 and 5.0. Default to 5.0"
+}
+
+variable "redis_charge_type" {
+  default = "PostPaid"
+}
+
+variable "redis_instance_class" {
+  default = "redis.master.small.default"
+}
+
+variable "redis_instance_type" {
+  default = "Redis"
+}
+
+variable "redis_vswitch_id" {
+  default = ""
+}
+
+variable "backup_period" {
+  default = "Saturday"
+}
+
+variable "redis_account_name" {
+  default = "xhy_test"
+}
+
+variable "redis_account_password" {
+  default = "test123"
+  description = "It may consist of letters, digits, or underlines, with a length of 6 to 32 characters"
+}
