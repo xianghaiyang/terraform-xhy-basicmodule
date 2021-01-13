@@ -258,7 +258,7 @@ module "basicmodule" {
 | system_disk_size | 系统盘大小   | string  | "40" | no  |
 | security_group_name | 安全组名称| string  | "" |  yes |
 | nic_type | 安全组网络类型internet/intranet| string  | "intranet" |  no |
-| ecs_vswitch_id | ecs实例的交换机id | string  | "" | no |
+| #ecs_vswitch_id | ecs实例的交换机id | string  | "" | no |
 
 <br>
 
@@ -269,7 +269,7 @@ module "basicmodule" {
 | address_type | slb的网络类型可选 internet/intranet | string  | "intranet" | no  |
 | specification | slb实例的规格。可选"slb.s1.small", "slb.s2.small", "slb.s2.medium", "slb.s3.small", "slb.s3.medium", "slb.s3.large" and "slb.s4.large" | string | "slb.s2.small" |  no |
 | internet_charge_type | 付费类型 If this value is "PayByBandwidth", then argument "internet" must be "true". Default is "PayByTraffic". If load balancer launched in VPC, this value must be "PayByTraffic"  | string  | "PayByTraffic" |  no |
-| slb_vswitch_id | slb绑定的交换机id   | string  | "" |  no |
+| #slb_vswitch_id | slb绑定的交换机id   | string  | "" |  no |
 
 
 <br>
@@ -283,7 +283,7 @@ module "basicmodule" {
 | mongo_replication_factor | 实例的备用节点数目[3, 5, 7]  | string  | "3" |  no |
 | mongo_account_password | root账号的密码It is a string of 6 to 32 characters and is composed of letters, numbers, and underlines   | string  | "" |  yes |
 | mongo_engine_version | 数据库引擎版本 3.4、4.0或4.2。 | string | "4.2" | no  |
-| mongo_vswitch_id | 数据库绑定的交换机id  | string  | "" | no  |
+| #mongo_vswitch_id | 数据库绑定的交换机id  | string  | "" | no  |
 
 
 <br>
@@ -330,7 +330,7 @@ module "basicmodule" {
 | rds_password | 账户密码 由字母、数字或下划线组成，长度为6 ~ 32个字符| string | 0 |  yes |
 | database_name | database命名 | string  | "" |  no |
 | character_set | 字符集,[相关规定](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs/resources/db_database) | string | "" |  no |
-| rds_vswitch_id | 数据库绑定的交换机id | string  | "" |  no |
+| #rds_vswitch_id | 数据库绑定的交换机id | string  | "" |  no |
 
 
 <br>
