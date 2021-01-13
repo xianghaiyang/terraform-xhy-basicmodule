@@ -4,11 +4,12 @@
 resource "alicloud_nat_gateway" "nat" {
   count                = var.use_nat_module ? 1 : 0
   vpc_id               = var.vpc_id                    # 这个破东西需要vpc
-  specification        = "Small"            # 规格大小，Small、Middle、Large
+  specification        = var.specification            # 规格大小，Small、Middle、Large
   name                 = var.name
   instance_charge_type = "PostPaid"                    #
   vswitch_id           = element(distinct(compact(concat(var.vswitch_id))), 0)  # 新型的网关就有交换机这个东东
   nat_type             = "Enhanced"                    # 网关类型
+
 }
 
 resource "alicloud_eip" "eip" {
@@ -22,14 +23,14 @@ resource "alicloud_eip" "eip" {
 //  vswitch_id            = element(distinct(compact(concat(var.vswitch_ids))), 0)
 }
 
-# 一个nat_getway资源绑定多个eip
+# 一个nat_getway资源可以绑定多个eip
 resource "alicloud_eip_association" "eip_asso" {
-  count                 = "${var.use_nat_module ? (var.eip_count != 0 ? var.eip_count : (var.delete_protection ? 1 : 0)) :0}"
+  count           = "${var.use_nat_module ? (var.eip_count != 0 ? var.eip_count : (var.delete_protection ? 1 : 0)) :0}"
   # 支持输入NAT网关实例ID、负载均衡SLB实例ID、云服务器ECS实例ID、
   #  辅助弹性网卡实例ID、高可用虚拟IP实例ID
 //  instance_id           = element(distinct(compact(concat(var.instance_id))), count.index)
-  instance_id           = alicloud_nat_gateway.nat.0.id
-  allocation_id         = element(distinct(compact(concat(alicloud_eip.eip.*.id))), count.index)
+  instance_id     = alicloud_nat_gateway.nat.0.id                                             # ant ID
+  allocation_id   = element(distinct(compact(concat(alicloud_eip.eip.*.id))), count.index)    # 一个或多个eip
 }
 
 
@@ -42,6 +43,12 @@ resource "alicloud_snat_entry" "this_snat_entry" {
   source_vswitch_id = element(distinct(compact(concat(var.snat_vswitch_id))), 0)   # 该交换机s 下的主机将通过配置的公网ip(可通过eip变成多个)访问internet
   snat_ip           = element(distinct(compact(concat(alicloud_eip.eip.*.ip_address))), 0)  # 公网ip地址，[]
 }
+
+
+
+
+
+
 
 
 
