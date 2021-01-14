@@ -29,6 +29,7 @@ module "basicmodule" {
   use_mq_module       = false
   use_rds_module      = true
   use_nat_module      = true
+  use_redis_module    = false
 ===============分割线===================
   #which_bucket_for_uploading = 1
   ecs_count           = 3
@@ -36,6 +37,7 @@ module "basicmodule" {
   eip_count           = 1
   mqtopic_count       = 2
   rds_database_count  = 2
+  redis_count         = 1
 ===============分割线===================
   tags = {
     name   = "xhy"
@@ -131,6 +133,21 @@ module "basicmodule" {
   eip_name             = "xhy_test"
   bandwidth            = "2"
   
+  
+================资源分割线=================
+  #redis
+  redis_instance_name    = "xhy_test"
+  account_privilege      = "RoleReadWrite"
+  redis_engine_version   = "4.0"
+  redis_charge_type      = "PostPaid"
+  redis_instance_class   = "redis.master.small.default"
+  redis_instance_type    = "Redis"
+  backup_period          = ["Saturday", "Sunday"]
+  redis_backup_time      = "18:00Z-19:00Z"
+  redis_account_name     = "xhy_te"
+  redis_account_password = "test_123"
+  #redis_vswitch_id      = ""
+  
 ```
 <br>
 
@@ -173,7 +190,9 @@ module "basicmodule" {
 
 ## 三、Tips
 
-- 创建及释放：   资源的创建顺序需满足依赖逻辑，例如，创建了vswitch后，才能建立ECS。同时释放顺序也需要满足依赖逻辑。创建多个资源时，会根据你提供的命名进行“排序命名”
+- 更改地区：     变换地区（如北京区>>上海区），首要任务就是更改vpc的相关参数(每个地区可用区都有区别)、环境变量中的region
+
+- 创建及释放：   资源的创建顺序需满足依赖逻辑，例如，创建了vswitch后，才能建立ECS。同时释放顺序也需要满足依赖逻辑，部分释放更改count数量，全部释放将开关改成false。创建多个资源时，会根据你提供的命名进行“排序命名”
    
 - 关于付费：     后台所有资源均为按量付费。 注意：instance_charge_type 、internet_charge_type两个值不建议调整
    
@@ -185,7 +204,7 @@ module "basicmodule" {
    
 - 关于slb：      后台逻辑根据你提供的交换机id创建一个 内网slb，并自动绑定所有ECS实例。如若未指定交换机，将在随机交换机下创建指定数量的ECS。当address_type选择公网时，交换机会被忽略。即address_type优先级大于slb_vswitch_id
    
--  关于eip：      后台逻辑可创建多个eip，并根据你提供的资源id（可以是NAT网关实例ID、负载均衡SLB实例ID、云服务器ECS实例ID、辅助弹性网卡实例ID、高可用虚拟IP实例ID），给这些资源分别添加弹性公网。注意，创建几个eip，就需要传入几个资源id（注意eip并非vpc下的资源）————现在已经取消该资源的独立使用
+-  关于eip：     后台逻辑可创建多个eip，并根据你提供的资源id（可以是NAT网关实例ID、负载均衡SLB实例ID、云服务器ECS实例ID、辅助弹性网卡实例ID、高可用虚拟IP实例ID），给这些资源分别添加弹性公网。注意，创建几个eip，就需要传入几个资源id（注意eip并非vpc下的资源）————现在已经取消该资源的独立使用
    
 - 关于mongodb：  后台逻辑根据你提供的交换机id，在指定交换机下创建指定数量的mongo实例。如若未指定交换机，将在随机交换机下创建指定数量的mongo实例
    
@@ -221,10 +240,15 @@ module "basicmodule" {
 | use_eip_module | 是否使用eip资源   | bool  |  true  | no  |
 | use_mongo_module | 是否使用mongodb资源   | bool  | true  | no  |
 | use_mq_module | 是否使用rocketMQ资源   | bool  | true  | no  |
+| use_rds_module | 是否使用rds资源   | bool  | true  | no  |
+| use_nat_module | 是否使用nat_gateway资源   | bool  | true  | no  |
+| use_redis_module | 是否使用redis资源   | bool  | true  | no  |
 | ecs_count  | 需要创建ecs实例的数量| int  |  2  |  use_ecs_module设置为true时，该参数有必要设置 |
 | eip_count  | 需要创建eip资源的数量| int  |  1  |  use_eip_module设置为true时，该参数有必要设置 |
 | mongo_count | 需要创建mongodb资源的数量  | int  | 1  | use_mongo_module设置为true时，该参数有必要设置  |
 | mqtopic_count | 需要创建MQ中topic资源的数量  | int  | 2  | use_mq_module设置为true时，该参数有必要设置  |
+| rds_database_count | rds下需要创建database资源的数量  | int  | 1  | use_rds_module设置为true时，该参数有必要设置  |
+| redis_count | 需要创建redis实例的数量  | int  | 2  | use_redis_module设置为true时，该参数有必要设置  |
 | tags | 统一标签   | map  | {name = "xhy",team = "devops",forwhat = "test"} | no  |  
 
 <br>
@@ -335,7 +359,7 @@ module "basicmodule" {
 
 <br>
 
-**nat**
+**nat_gateway**
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | nat_name | nat网关实例命名 | string  | "" | yes  |
@@ -345,6 +369,25 @@ module "basicmodule" {
 | #snat_vswitch_id | 出网规则所绑定的交换机（可通过一个网段代替） | string  | "" |  no |
 | eip_name | eip命名 | string | "" |  yes |
 | bandwidth | eip的宽带大小Mbps | string  | "2" |  no |
+
+<br>
+
+**redis**
+
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| redis_instance_name | 若干个redis实例命名 | string  | "" | yes  |
+| redis_instance_class | redis[规格大小](https://help.aliyun.com/document_detail/26350.html?spm=a2c4g.11186623.6.577.60115e1b2rjJ9M) | string  | "redis.master.small.default" | yes  |
+| redis_engine_version | redis'数据库版本，其包含2.8、4.0、5.0 | string | "4.0" | no  |
+| redis_charge_type | 套餐类型，PrePaid/PostPaid，默认为PostPaid | string  | "PostPaid" |  no |
+| redis_instance_type | 引擎类型 | string  | "Redis" |  no |
+| account_privilege | 数据库账号的权限，可用值有RoleReadOnly、RoleReadWrite、RoleRepl | string | "RoleReadWrite" |  yes |
+| redis_account_name | 账号命名The name must be 1 to 16 characters in length and contain lowercase letters, digits, and underscores (_). It must start with a lowercase letter | string  | "xhy_test" |  no |
+| redis_account_password | 账号密码It may consist of letters, digits, or underlines, with a length of 6 to 32 characters | string | "test_123" |  yes |
+| backup_period | 备份时间 | list  | ["Saturday", "Sunday"] |  no |
+| redis_backup_time | 备份时间段（时间段输入时间必须是utc时间，utc时间和北京标准时间相差8小时），默认输入实际上是18+8，即02：00| string  | "18:00Z-19:00Z" |  no |
+| #redis_vswitch_id | redis绑定的交换机，未指定将随机绑定 | string  | "" |  no |
+
 
 
 
