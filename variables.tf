@@ -427,3 +427,7 @@ variable "redis_account_password" {
 variable "redis_backup_period" {
   default = ["Saturday", "Sunday"]
 }
+
+variable "redis_backup_time" {
+  default = "18:00Z-19:00Z"
+}
