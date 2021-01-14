@@ -26,6 +26,8 @@ variable "account_privilege" {}
 
 variable "backup_period" {}
 
+variable "redis_backup_time" {}
+
 variable "count_format" {}
 
 variable "tags" {}

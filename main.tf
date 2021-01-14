@@ -174,6 +174,7 @@ module "redis" {
   vswitch_ids = var.redis_vswitch_id != "" ? [var.redis_vswitch_id] : module.vpc.vswitch_ids
 
   backup_period = var.redis_backup_period
+  redis_backup_time = var.redis_backup_time
 }
 
 
