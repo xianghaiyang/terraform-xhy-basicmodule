@@ -14,9 +14,9 @@ resource "alicloud_kvstore_instance" "default" {
 resource "alicloud_kvstore_account" "account" {
   count           = "${var.use_redis_module ? (var.instance_count != 0 ? var.instance_count : (var.delete_protection ? 1 : 0)) : 0}"
   instance_id      = "${element(alicloud_kvstore_instance.default.*.id, count.index)}"   # 实例
-  account_name     = "${var.instance_name}-${format(var.count_format, count.index+1)}"           # 数据库账户
-  account_password = "${var.account_password}"       # 密码
-  account_privilege = "${var.account_privilege}"     # 读写权限
+  account_name     = "${var.account_name}_${format(var.count_format, count.index+1)}"   # 数据库账户
+  account_password = var.account_password          # 密码
+  account_privilege = var.account_privilege        # 读写权限
 }
 
 resource "alicloud_kvstore_backup_policy" "default" {

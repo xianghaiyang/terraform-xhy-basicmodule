@@ -415,12 +415,12 @@ variable "backup_period" {
   default = "Saturday"
 }
 
+# 可
 variable "redis_account_name" {
   default = "xhy_test"
 }
-
 variable "redis_account_password" {
-  default = "YourPassword_123"
+  default = "test_123"
   description = "It may consist of letters, digits, or underlines, with a length of 6 to 32 characters"
 }
 
