@@ -177,8 +177,21 @@ module "redis" {
   redis_backup_time = var.redis_backup_time
 }
 
-
-
+# ===========eip单独搭配实例使用============
+module "eip" {
+  source = "./eip"
+  use_eip_module = "${var.use_eip_module}"
+  bandwidth = "${var.bandwidth}"
+  eip_internet_charge_type = "${var.eip_internet_charge_type}"
+  isp = "${var.isp}"
+  eip_instance_charge_type = "${var.eip_instance_charge_type}"
+  tags = "${var.tags}"
+  delete_protection = "${var.delete_protection}"
+  eip_count = "${var.eip_count}"
+  eip_name = "${var.eip_name}"
+  instance_id = "${module.ecs.instance_ids}"
+  count_format = "${var.count_format}"
+}
 
 
 

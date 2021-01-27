@@ -356,6 +356,8 @@ variable "nat_specification" {
   default = "Small"
 }
 
+
+
 # ================================================
 
 variable "eip_name" {
