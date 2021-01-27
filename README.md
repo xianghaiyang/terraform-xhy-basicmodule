@@ -26,8 +26,13 @@ module "basicmodule" {
   #use_eip_module     = false   已经取消eip的单独使用
   use_mongo_module    = false
   use_mq_module       = false
+<<<<<<< HEAD
   use_rds_module      = false
   use_nat_module      = false
+=======
+  use_rds_module      = true
+  use_nat_module      = true
+>>>>>>> 9f33f743fafab36e1f1582bacefeed199193688e
   use_redis_module    = false
 ===============分割线===================
   ecs_count           = 2
@@ -145,7 +150,10 @@ module "basicmodule" {
   redis_account_name     = "xhy_te"
   redis_account_password = "test_123"
   #redis_vswitch_id      = ""
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9f33f743fafab36e1f1582bacefeed199193688e
   
 ```
 <br>
@@ -380,8 +388,11 @@ module "basicmodule" {
 <br>
 
 **nat_gateway**
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 9f33f743fafab36e1f1582bacefeed199193688e
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | nat_name | nat网关实例命名 | string  | "" | yes  |
@@ -391,6 +402,25 @@ module "basicmodule" {
 | #snat_vswitch_id | 出网规则所绑定的交换机（可通过一个网段代替） | string  | "" |  no |
 | eip_name | eip命名 | string | "" |  yes |
 | bandwidth | eip的宽带大小Mbps | string  | "2" |  no |
+
+<br>
+
+**redis**
+
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| redis_instance_name | 若干个redis实例命名 | string  | "" | yes  |
+| redis_instance_class | redis[规格大小](https://help.aliyun.com/document_detail/26350.html?spm=a2c4g.11186623.6.577.60115e1b2rjJ9M) | string  | "redis.master.small.default" | yes  |
+| redis_engine_version | redis'数据库版本，其包含2.8、4.0、5.0 | string | "4.0" | no  |
+| redis_charge_type | 套餐类型，PrePaid/PostPaid，默认为PostPaid | string  | "PostPaid" |  no |
+| redis_instance_type | 引擎类型 | string  | "Redis" |  no |
+| account_privilege | 数据库账号的权限，可用值有RoleReadOnly、RoleReadWrite、RoleRepl | string | "RoleReadWrite" |  yes |
+| redis_account_name | 账号命名The name must be 1 to 16 characters in length and contain lowercase letters, digits, and underscores (_). It must start with a lowercase letter | string  | "xhy_test" |  no |
+| redis_account_password | 账号密码It may consist of letters, digits, or underlines, with a length of 6 to 32 characters | string | "test_123" |  yes |
+| backup_period | 备份时间 | list  | ["Saturday", "Sunday"] |  no |
+| redis_backup_time | 备份时间段（时间段输入时间必须是utc时间，utc时间和北京标准时间相差8小时），默认输入实际上是18+8，即02：00| string  | "18:00Z-19:00Z" |  no |
+| #redis_vswitch_id | redis绑定的交换机，未指定将随机绑定 | string  | "" |  no |
+
 
 
 <br>
